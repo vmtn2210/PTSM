@@ -1,1 +1,1 @@
-Chạy flutter pub get
+Run flutter pub get
