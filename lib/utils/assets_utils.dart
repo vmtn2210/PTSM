@@ -22,4 +22,6 @@ class AssetUtils {
   static const imgHeaderFind = 'assets/images/img_header_find.png';
   static const imgTournament = 'assets/images/img_tournament.png';
   static const imgGroupStage = 'assets/images/img_group_stage.jpg';
+  static const imgMen = 'assets/images/img_men.jpg';
+  static const imgWoman = 'assets/images/img_woman.jpg';
 }

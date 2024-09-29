@@ -38,7 +38,6 @@ class _GroupStageViewState extends ConsumerState<GroupStageView> {
       backgroundColor: ColorUtils.primaryBackgroundColor,
       body: Stack(
         children: [
-          // Background image
           Container(
             height: ScreenUtil().screenHeight / 2,
             width: ScreenUtil().screenWidth,
@@ -69,7 +68,7 @@ class _GroupStageViewState extends ConsumerState<GroupStageView> {
                       roundsAsyncValue.when(
                         data: (rounds) {
                           final firstRound =
-                              rounds.isNotEmpty ? rounds.first : null;
+                          rounds.isNotEmpty ? rounds.first : null;
                           return teamsAsyncValue.when(
                             data: (teamGroups) {
                               if (teamGroups.isEmpty) {
@@ -83,7 +82,10 @@ class _GroupStageViewState extends ConsumerState<GroupStageView> {
                                   ),
                                 );
                               }
-                              final firstGroup = teamGroups.entries.first;
+
+                              final sortedGroups = teamGroups.entries.toList()
+                                ..sort((a, b) => a.key.compareTo(b.key));
+
                               return Column(
                                 children: [
                                   if (firstRound != null &&
@@ -92,7 +94,7 @@ class _GroupStageViewState extends ConsumerState<GroupStageView> {
                                       alignment: Alignment.topRight,
                                       child: Padding(
                                         padding:
-                                            const EdgeInsets.only(right: 8.0),
+                                        const EdgeInsets.only(right: 8.0),
                                         child: ElevatedButton(
                                           onPressed: () {
                                             Navigator.push(
@@ -107,10 +109,10 @@ class _GroupStageViewState extends ConsumerState<GroupStageView> {
                                           },
                                           style: ElevatedButton.styleFrom(
                                             backgroundColor:
-                                                const Color(0xFF1244A2),
+                                            const Color(0xFF1244A2),
                                             shape: RoundedRectangleBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(8),
+                                              BorderRadius.circular(8),
                                             ),
                                             foregroundColor: Colors.white,
                                           ),
@@ -118,9 +120,19 @@ class _GroupStageViewState extends ConsumerState<GroupStageView> {
                                         ),
                                       ),
                                     ),
-                                  _buildGroupTable(
-                                      firstGroup.key, firstGroup.value),
-                                  const SizedBox(height: 20),
+                                  ...sortedGroups.asMap().entries.map((entry) {
+                                    final index = entry.key;
+                                    final group = entry.value;
+                                    final groupName =
+                                    String.fromCharCode(65 + index);
+                                    return Column(
+                                      children: [
+                                        _buildGroupTable(
+                                            groupName, group.value),
+                                        const SizedBox(height: 20),
+                                      ],
+                                    );
+                                  }).toList(),
                                 ],
                               );
                             },
@@ -198,11 +210,11 @@ class _GroupStageViewState extends ConsumerState<GroupStageView> {
                       ),
                       showSchedule
                           ? ScheduleView(
-                              tournamentId: widget.tournamentId,
-                              onMatchSelected: onMatchSelected,
-                            )
+                        tournamentId: widget.tournamentId,
+                        onMatchSelected: onMatchSelected,
+                      )
                           : CompetitorsStageView(
-                              tournamentId: widget.tournamentId),
+                          tournamentId: widget.tournamentId),
                     ],
                   ),
                 ),
@@ -253,24 +265,24 @@ class _GroupStageViewState extends ConsumerState<GroupStageView> {
             ],
           ),
           ...teams.map((team) => TableRow(
-                children: [
-                  TableCell(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(team.teamName,
-                          style: const TextStyle(color: Colors.white)),
-                    ),
-                  ),
-                  TableCell(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('${team.wins} - ${team.losses}',
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(color: Colors.white)),
-                    ),
-                  ),
-                ],
-              )),
+            children: [
+              TableCell(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(team.teamName,
+                      style: const TextStyle(color: Colors.white)),
+                ),
+              ),
+              TableCell(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('${team.wins} - ${team.losses}',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(color: Colors.white)),
+                ),
+              ),
+            ],
+          )),
         ],
       ),
     );

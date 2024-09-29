@@ -15,8 +15,8 @@ class ItemCompetitorsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity, // Ensure the container has a width
-      height: 200.h, // Set a fixed height or adjust as needed
+      width: double.infinity,
+      height: 200.h,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -30,15 +30,14 @@ class ItemCompetitorsWidget extends StatelessWidget {
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.network(
-            AssetUtils.imgSignIn,
+          athlete.gender.toLowerCase() == "female"
+              ? Image.asset(
+            AssetUtils.imgWoman,
             fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Image.asset(
-                AssetUtils.imgSignIn,
-                fit: BoxFit.cover,
-              );
-            },
+          )
+              : Image.asset(
+            AssetUtils.imgMen,
+            fit: BoxFit.cover,
           ),
           Positioned(
             bottom: 0,
@@ -57,7 +56,7 @@ class ItemCompetitorsWidget extends StatelessWidget {
               ),
               padding: EdgeInsets.all(8.w),
               child: Column(
-                mainAxisSize: MainAxisSize.min, // Use minimum vertical space
+                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
